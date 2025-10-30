@@ -1,0 +1,43 @@
+{
+  "name": "smart-product-recommendation-system",
+  "version": "1.0.0",
+  "description": "Advanced e-commerce product recommendation system demonstrating sophisticated data structures and algorithms",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "demo": "node src/index.js"
+  },
+  "keywords": [
+    "algorithms",
+    "data-structures",
+    "recommendation-system",
+    "graph-algorithms",
+    "heap",
+    "binary-search",
+    "sorting-algorithms",
+    "e-commerce",
+    "machine-learning",
+    "computer-science"
+  ],
+  "author": "Your Name <your.email@example.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/smart-product-recommendation-system.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/smart-product-recommendation-system/issues"
+  },
+  "homepage": "https://github.com/yourusername/smart-product-recommendation-system#readme",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "files": [
+    "src/",
+    "README.md",
+    "ProjectSummary.md",
+    "recommendatonSystem.js"
+  ]
+}
