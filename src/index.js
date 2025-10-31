@@ -7,7 +7,8 @@
 
 const RecommendationEngine = require('./services/RecommendationEngine');
 const SearchEngine = require('./algorithms/SearchEngine');
-const products = require('./data/products');
+// Harneet's personalized product store
+const myProductStore = require('./data/products');
 
 /**
  * Simple demo function to showcase the system
@@ -26,10 +27,10 @@ function runDemo() {
     console.log(`${i+1}. ${rec.product.name}`);
   });
   
-  // Demo 2: Trending products
-  console.log("\n🔥 Top Trending Products:");
-  const trending = engine.getTrendingRecommendations(3);
-  trending.forEach((product, i) => {
+  // Demo 2: Popular products - Harneet's personalized approach
+  console.log("\n🔥 Top Popular Products:");
+  const popularItems = engine.getPopularItemRecommendations(3);
+  popularItems.forEach((product, i) => {
     console.log(`${i+1}. ${product.name} (Popularity: ${product.popularity})`);
   });
   
@@ -49,7 +50,7 @@ function runDemo() {
   
   // Demo 5: Advanced search
   console.log("\n🔍 Search Results for 'wireless':");
-  const searchResults = SearchEngine.advancedTextSearch(products, 'wireless');
+  const searchResults = SearchEngine.advancedTextSearch(myProductStore, 'wireless');
   searchResults.slice(0, 3).forEach((result, i) => {
     console.log(`${i+1}. ${result.product.name} (Relevance: ${result.relevanceScore})`);
   });
@@ -65,18 +66,18 @@ function runDemo() {
   
   return {
     recommendations,
-    trending,
+    popularItems,  // Changed from trending - Harneet
     budget,
     hybrid,
     analytics
   };
 }
 
-// Export for testing and module use
+// Export for testing and module use - Harneet's personalized modules
 module.exports = {
   RecommendationEngine,
   SearchEngine,
-  products,
+  myProductStore,
   runDemo
 };
 
