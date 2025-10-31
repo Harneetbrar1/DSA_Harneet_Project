@@ -1,7 +1,6 @@
 /**
- * MY PRODUCT STORE - Personalized by Harneet
  * Hash Table implementation for O(1) product operations
- * Understanding by Harneet: Using object as hash table for fast product lookup by ID
+ * Using object as hash table for fast product lookup by ID
  */
 
 const myProductStore = {
