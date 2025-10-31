@@ -1,9 +1,10 @@
 /**
- * PRODUCT DATABASE
+ * MY PRODUCT STORE - Personalized by Harneet
  * Hash Table implementation for O(1) product operations
+ * Understanding by Harneet: Using object as hash table for fast product lookup by ID
  */
 
-const products = {
+const myProductStore = {
   1: {
     id: 1,
     name: "MacBook Pro M2",
@@ -166,4 +167,5 @@ const products = {
   }
 };
 
-module.exports = products;
+// Export myProductStore - Harneet's personalized product database
+module.exports = myProductStore;
