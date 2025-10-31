@@ -50,8 +50,9 @@ class ProductGraph {
       const { id: currentId, depth, weight } = queue.shift();
       
       if (depth > 0) { // Don't include starting product
-        const products = require('../data/products');
-        const product = products[currentId];
+        // Harneet's understanding: Loading product data for BFS traversal
+        const myProductStore = require('../data/products');
+        const product = myProductStore[currentId];
         if (product) {
           recommendations.push({
             product,
