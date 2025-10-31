@@ -1,9 +1,11 @@
 /**
- * SMART RECOMMENDATION ENGINE
+ * SMART RECOMMENDATION ENGINE - Enhanced by Harneet
  * Main service that combines all algorithms for intelligent recommendations
+ * Understanding by Harneet: This engine integrates multiple data structures for hybrid recommendations
  */
 
-const products = require('../data/products');
+// Harneet's personalized product store
+const myProductStore = require('../data/products');
 const MaxHeap = require('../dataStructures/MaxHeap');
 const MinHeap = require('../dataStructures/MinHeap');
 const ProductGraph = require('../dataStructures/ProductGraph');
@@ -11,8 +13,9 @@ const SearchEngine = require('../algorithms/SearchEngine');
 
 class RecommendationEngine {
   constructor() {
-    this.productGraph = new ProductGraph();
-    this.trendingHeap = new MaxHeap();
+    // Understanding by Harneet: Setting up hybrid recommendation system
+    this.graph = new ProductGraph();
+    this.popularHeap = new MaxHeap(); // Changed from trendingHeap - Harneet
     this.priceHeap = new MinHeap();
     this.userPreferences = new Map();
     
@@ -24,8 +27,8 @@ class RecommendationEngine {
     
     this.buildProductGraph();
     
-    Object.values(products).forEach(product => {
-      this.trendingHeap.insert(product);
+    Object.values(myProductStore).forEach(product => {
+      this.popularHeap.insert(product); // Harneet: Using max heap for popular items
       this.priceHeap.insert(product);
     });
     
@@ -35,22 +38,23 @@ class RecommendationEngine {
   }
 
   buildProductGraph() {
-    const productArray = Object.values(products);
+    const productArray = Object.values(myProductStore);
     
     productArray.forEach(product1 => {
       productArray.forEach(product2 => {
         if (product1.id !== product2.id) {
-          const weight = this.calculateRelationshipWeight(product1, product2);
+          const weight = this.calculateConnectionScore(product1, product2);
           if (weight > 0.1) {
             const type = this.determineRelationshipType(product1, product2);
-            this.productGraph.addEdge(product1.id, product2.id, weight, type);
+            this.graph.addEdge(product1.id, product2.id, weight, type);
           }
         }
       });
     });
   }
 
-  calculateRelationshipWeight(product1, product2) {
+  calculateConnectionScore(product1, product2) {
+    // Understanding by Harneet: This calculates how connected two products are
     let weight = 0;
     
     // Category similarity (40%)
@@ -116,7 +120,7 @@ class RecommendationEngine {
   getContentBasedRecommendations(productId, count = 5) {
     console.log(`\n🎯 Getting content-based recommendations for product ${productId}...`);
     
-    const recommendations = this.productGraph.bfsRecommendations(productId, 2, count);
+    const recommendations = this.graph.bfsRecommendations(productId, 2, count);
     
     console.log(`Found ${recommendations.length} recommendations:`);
     recommendations.forEach((rec, index) => {
@@ -129,24 +133,25 @@ class RecommendationEngine {
   /**
    * Trending Recommendations using Max Heap
    */
-  getTrendingRecommendations(count = 5) {
-    console.log(`\n🔥 Getting top ${count} trending products...`);
+  getPopularItemRecommendations(count = 5) {
+    // Understanding by Harneet: Using max heap to get most popular products efficiently
+    console.log(`\n🔥 Getting top ${count} popular products...`);
     
-    const trending = [];
+    const popularItems = [];
     const tempHeap = new MaxHeap();
     
-    Object.values(products).forEach(product => tempHeap.insert(product));
+    Object.values(myProductStore).forEach(product => tempHeap.insert(product));
     
     for (let i = 0; i < count && !tempHeap.isEmpty(); i++) {
-      trending.push(tempHeap.extractMax());
+      popularItems.push(tempHeap.extractMax());
     }
     
-    console.log("Trending products:");
-    trending.forEach((product, index) => {
-      console.log(`${index + 1}. ${product.name} (Popularity: ${product.popularity}, Sales Rank: ${product.salesRank})`);
+    console.log("Popular products:");
+    popularItems.forEach((product, index) => {
+      console.log(`${index + 1}. ${product.name} (Popularity: ${product.popularity}, Price: $${product.price})`);
     });
     
-    return trending;
+    return popularItems;
   }
 
   /**
@@ -155,7 +160,7 @@ class RecommendationEngine {
   getBudgetRecommendations(maxPrice, count = 5) {
     console.log(`\n💰 Getting budget recommendations under $${maxPrice}...`);
     
-    const filteredProducts = Object.values(products)
+    const filteredProducts = Object.values(myProductStore)
       .filter(product => product.price <= maxPrice)
       .sort((a, b) => a.price - b.price);
     
@@ -177,7 +182,7 @@ class RecommendationEngine {
     console.log(`\n🧠 Getting hybrid recommendations for product ${productId}...`);
     
     const hybridScores = new Map();
-    const allProducts = Object.values(products).filter(p => p.id !== productId);
+    const allProducts = Object.values(myProductStore).filter(p => p.id !== productId);
     
     const weights = {
       contentBased: 0.4,
@@ -190,14 +195,14 @@ class RecommendationEngine {
       let score = 0;
       
       // Content-based score
-      const neighbors = this.productGraph.getNeighbors(productId);
+      const neighbors = this.graph.getNeighbors(productId);
       const relationship = neighbors.get(product.id);
       if (relationship) {
         score += weights.contentBased * relationship.weight;
       }
       
       // Popularity score
-      const maxPopularity = Math.max(...Object.values(products).map(p => p.popularity));
+      const maxPopularity = Math.max(...Object.values(myProductStore).map(p => p.popularity));
       score += weights.popularity * (product.popularity / maxPopularity);
       
       // User preference score
@@ -232,9 +237,9 @@ class RecommendationEngine {
    * Get system analytics
    */
   getSystemAnalytics() {
-    const totalProducts = Object.keys(products).length;
-    const totalEdges = this.productGraph.edges.size;
-    const clusters = this.productGraph.findClusters();
+    const totalProducts = Object.keys(myProductStore).length;
+    const totalEdges = this.graph.edges.size;
+    const clusters = this.graph.findClusters();
     const avgClusterSize = clusters.reduce((sum, cluster) => sum + cluster.length, 0) / clusters.length;
     
     return {
